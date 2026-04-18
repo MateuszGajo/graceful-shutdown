@@ -9,7 +9,7 @@
   "scripts": {
     "test": "jest ./test/test.spec.ts --detectOpenHandles",
     "exmaple:express": "tsx examples/express.ts",
-    "example:rabbitmq": "tsx examples/application.ts"
+    "example:application": "tsx examples/application.ts"
   },
   "keywords": [],
   "author": "",

@@ -34,7 +34,7 @@ const main = async () => {
 
   app.get("/", (req: Request, res: Response) => {
     console.log("got request?");
-    setTimeout(() => res.send("Hello World!"), 500);
+    setTimeout(() => res.send("Hello World!"), 5000);
     console.log("Sent event");
     eventEmitter.emit("sendMessage");
   });
@@ -139,7 +139,7 @@ const shutdownFunc = (options: ShutdownOptions) => {
   let isShuttingDown = false;
 
   const opts = {
-    development: true,
+    development: options.development ?? true,
     timeout: options.timeout ?? 20000,
     server: options.server
       ? {
@@ -172,7 +172,11 @@ const shutdownFunc = (options: ShutdownOptions) => {
   }
 
   return async () => {
-    if (isShuttingDown || opts.development) return;
+    if (opts.development) {
+      process.exit(0);
+    }
+
+    if (isShuttingDown) return;
 
     isShuttingDown = true;
     const forceExit = setTimeout(() => {
