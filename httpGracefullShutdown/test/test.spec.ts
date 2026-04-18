@@ -1,4 +1,4 @@
-import { httpGracefullShutdown } from "../gracefull";
+import { httpGracefullShutdown } from "../httpGracefullShutdown";
 import http from "http";
 import { AddressInfo } from "net";
 

@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import http from "node:http";
-import { httpGracefullShutdown } from "../gracefull";
+import { httpGracefullShutdown } from "../httpGracefullShutdown/httpGracefullShutdown";
 
 const app = express();
 const port = 3000;

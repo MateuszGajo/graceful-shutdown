@@ -5,7 +5,7 @@ import {
   connect,
 } from "amqp-connection-manager";
 import { EventEmitter } from "node:stream";
-import { httpGracefullShutdown } from "../gracefull";
+import { httpGracefullShutdown } from "../httpGracefullShutdown/httpGracefullShutdown";
 import http from "node:http";
 
 const main = async () => {
@@ -59,7 +59,7 @@ const main = async () => {
       rabbitmqConn,
       consumerTags: [consumerTag],
     },
-    development: false,
+    development: true,
   });
 
   process.on("SIGINT", () => shutdown().catch(console.error));

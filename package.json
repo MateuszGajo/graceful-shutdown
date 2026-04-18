@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "jest ./test/test.spec.ts --detectOpenHandles",
+    "test": "jest",
     "exmaple:express": "tsx examples/express.ts",
     "example:application": "tsx examples/application.ts"
   },
