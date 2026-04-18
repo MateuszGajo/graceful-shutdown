@@ -9,7 +9,7 @@ echo "==> Waiting for server to start..."
 sleep 2
 
 echo "==> Killing RabbitMQ..."
-sudo service rabbitmq-server stop &
+sudo service rabbitmq-server restart &
 sleep 0.5
 echo "==> Sending request to http://localhost:3000..."
 curl  http://localhost:3000/ &

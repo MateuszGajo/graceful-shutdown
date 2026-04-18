@@ -1,4 +1,4 @@
-import { GracefulShutdown } from "../gracefull";
+import { httpGracefullShutdown } from "../gracefull";
 import http from "http";
 import { AddressInfo } from "net";
 
@@ -98,7 +98,7 @@ const createHttpClient = (agentOptions: http.AgentOptions = {}) => {
 
 test("should close server", async () => {
   const { server } = await createServer(1000);
-  const shutdown = GracefulShutdown(server, { timeout: 5000 });
+  const shutdown = httpGracefullShutdown(server, { timeout: 5000 });
 
   await shutdown();
 
@@ -106,8 +106,8 @@ test("should close server", async () => {
 });
 
 test("should finish request before killing app", async () => {
-  const { server, url } = await createServer(1000);
-  const shutdown = GracefulShutdown(server, { timeout: 5000 });
+  const { server, url } = await createServer(2000);
+  const shutdown = httpGracefullShutdown(server, { timeout: 5000 });
   const httpClient = createHttpClient();
 
   const [data] = await Promise.all([
@@ -128,7 +128,7 @@ test("should finish request before killing app", async () => {
 test("Should not accept connection after shutdown", async () => {
   const { server, url } = await createServer(1000);
   const httpClient = createHttpClient();
-  const shutdown = GracefulShutdown(server, { timeout: 5000 });
+  const shutdown = httpGracefullShutdown(server, { timeout: 5000 });
 
   await shutdown();
   const res = await httpClient(url).catch((e) => e);
@@ -142,7 +142,7 @@ test("keep-alive connection is closed after request finishes during shutdown", a
   let connectionCount = 0;
   server.on("connection", () => connectionCount++);
   const httpClient = createHttpClient(new http.Agent({ keepAlive: true }));
-  const shutdown = GracefulShutdown(server, { timeout: 5000 });
+  const shutdown = httpGracefullShutdown(server, { timeout: 5000 });
 
   await httpClient(url);
 
@@ -166,7 +166,10 @@ test("keep-alive connection is closed after request finishes during shutdown", a
 test("should force close connection when timeout exceeded", async () => {
   const { server, url, cleanup } = await createServer(3000);
   const httpClient = createHttpClient(new http.Agent({ keepAlive: true }));
-  const shutdown = GracefulShutdown(server, { timeout: 1000 });
+  const shutdown = httpGracefullShutdown(server, {
+    timeout: 1000,
+    serverCloseTimeout: 500,
+  });
 
   const [requestResult] = await Promise.all([
     httpClient(url).catch((err) => err),

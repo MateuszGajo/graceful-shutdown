@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import http from "node:http";
-import { GracefulShutdown } from "../gracefull";
+import { httpGracefullShutdown } from "../gracefull";
 
 const app = express();
 const port = 3000;
@@ -14,7 +14,7 @@ app.get("/", (req: Request, res: Response) => {
   setTimeout(() => res.send("Hello World!"), 6_500);
 });
 
-const shutdown = GracefulShutdown(server, { timeout: 30_000 });
+const shutdown = httpGracefullShutdown(server, { timeout: 30_000 });
 
 process.on("SIGINT", () => {
   shutdown().then(() => {
